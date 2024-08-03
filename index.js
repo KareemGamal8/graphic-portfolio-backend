@@ -16,6 +16,10 @@ server.use(middlewares);
 // Use default router
 server.use(router);
 
+jsonServer.rewriter({
+  "/": "/$1",
+});
+
 // Start server
 const port = 3000;
 
