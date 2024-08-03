@@ -1,5 +1,4 @@
 const jsonServer = require("json-server");
-const auth = require("json-server-auth");
 const cors = require("cors");
 const server = jsonServer.create();
 const router = jsonServer.router("data.json");
@@ -10,13 +9,16 @@ server.use(cors());
 
 // Add authentication middleware
 server.db = router.db;
-server.use(auth);
 
 // Set default middlewares (logger, static, cors, etc.)
 server.use(middlewares);
 
 // Use default router
 server.use(router);
+
+jsonServer.rewriter({
+  "/": "/$1",
+});
 
 // Start server
 const port = 3000;
