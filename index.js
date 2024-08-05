@@ -1,26 +1,23 @@
 const jsonServer = require("json-server");
-const cors = require("cors");
 const server = jsonServer.create();
 const router = jsonServer.router("data.json");
+
+// Make sure to use the default middleware
 const middlewares = jsonServer.defaults();
 
-// Enable CORS for all routes
-server.use(cors());
-
-// Add authentication middleware
-server.db = router.db;
-
-// Set default middlewares (logger, static, cors, etc.)
 server.use(middlewares);
-
-// Use default router
+// Add this before server.use(router)
+server.use(
+  // Add custom route here if needed
+  jsonServer.rewriter({
+    "/api/*": "/$1",
+  })
+);
 server.use(router);
-
-jsonServer.rewriter({
-  "/": "/$1",
+// Listen to port
+server.listen(3000, () => {
+  console.log("JSON Server is running");
 });
 
-// Start server
-const port = 3000;
-
-server.listen(port);
+// Export the Server API
+module.exports = server;
